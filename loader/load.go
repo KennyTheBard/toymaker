@@ -9,6 +9,7 @@ import (
 	truetype "github.com/golang/freetype/truetype"
 )
 
+// LoadImage return the image loaded from the file at the given path
 func LoadImage(path string) (image.Image, error) {
     file, errOpen := os.Open(path)
     if errOpen != nil {
@@ -21,6 +22,7 @@ func LoadImage(path string) (image.Image, error) {
     return img, errDecode
 }
 
+// LoadFont return the font loaded from the file at the given path
 func LoadFont(path string) (*truetype.Font, error) {
     bytes, errRead := ioutil.ReadFile(path)
     if errRead != nil {
