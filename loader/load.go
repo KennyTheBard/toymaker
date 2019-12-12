@@ -2,7 +2,8 @@ package loader
 
 import (
 	"os"
-	"image"
+	"image/draw"
+    "image"
 	"io/ioutil"
 
 	freetype "github.com/golang/freetype"
@@ -17,9 +18,15 @@ func LoadImage(path string) (image.Image, error) {
     }
     defer file.Close()
 
-    img, _, errDecode := image.Decode(file)
+    tempImg, _, errDecode := image.Decode(file)
+    if errDecode != nil {
+        return tempImg, errDecode
+    }
 
-    return img, errDecode
+    bounds := tempImg.Bounds()
+    img := image.NewRGBA(image.Rect(0, 0, bounds.Dx(), bounds.Dy()))
+    draw.Draw(img, img.Bounds(), tempImg, bounds.Min, draw.Src)
+    return img, nil
 }
 
 // LoadFont return the font loaded from the file at the given path
